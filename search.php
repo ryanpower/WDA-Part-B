@@ -1,6 +1,6 @@
 <h1>Wine Search
 </h1>
-<form id="form1" name="form1" method="post" action="">
+<form id="form1" name="form1" method="get" action="results.php">
 <table width="600" border="0" cellspacing="0" cellpadding="2">
 	<tr>
 		<td>Wine name:</td>
