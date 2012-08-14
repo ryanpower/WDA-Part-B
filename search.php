@@ -1,5 +1,5 @@
 <?php
-print "Hi Ryan";
+print "Hi Ryans";
 phpinfo();
 // Changed from web
 ?>
