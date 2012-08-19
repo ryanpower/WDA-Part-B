@@ -1,3 +1,9 @@
+<?php 
+
+	mysql_connect("localhost", "ultim43_public", "powersports") or die(mysql_error()); 
+	mysql_select_db("ultim43_winestore") or die(mysql_error()); 
+
+?>
 <h1>Wine Search
 </h1>
 <form id="form1" name="form1" method="get" action="results.php">
@@ -14,29 +20,59 @@
 	</tr>
 	<tr>
 		<td>Region:</td>
-		<td><label for="region"></label>
+		<td>
 			<select name="region" id="region">
-				<option value="a">A Region</option>
-				<option value="b">B Region</option>
+<?php
+	$region_q = mysql_query("SELECT * FROM region");
+	while ($a = mysql_fetch_assoc($region_q)) {
+		print '<option value="'.$a["region_id"].'">'.$a["region_name"].'</option>';
+	}
+?>
 			</select></td>
 	</tr>
 	<tr>
 		<td>Grape Variety:</td>
 		<td><select name="grape_type" id="grape_type">
-			<option value="a">Type A</option>
-			<option value="b">Type B</option>
+			<option value="ALL">All</option>
+<?php
+	$grape_q = mysql_query("SELECT * FROM grape_variety ORDER BY variety ASC");
+	while ($a = mysql_fetch_assoc($grape_q)) {
+		print '<option value="'.$a["variety_id"].'">'.$a["variety"].'</option>';
+	}
+?>
 		</select></td>
 	</tr>
 	<tr>
 		<td>Year range</td>
 		<td><select name="year_low" id="year_low">
-			<option value="1986">1986</option>
-			<option value="1987">1987</option>
+<?php
+$year_q = mysql_query("SELECT min(year) as min, max(year) as max FROM wine");
+$year_a = mysql_fetch_assoc($year_q);
+$min_year = $year_a["min"];
+$max_year = $year_a["max"];
+
+for ($year = $min_year; $year <= $max_year; $year++) {
+if ($year == $min_year) {
+$selected = 'selected="selected" ';
+} else {
+$selected = '';
+}
+print '<option value="'.$year.'" '.$selected.'>'.$year.'</option>';
+}
+?>
 		</select> 
 			to 
 			<select name="year_high" id="year_high">
-				<option value="2012">2012</option>
-				<option value="2013">2013</option>
+<?php
+for ($year = $min_year; $year <= $max_year; $year++) {
+if ($year == $max_year) {
+$selected = 'selected="selected" ';
+} else {
+$selected = '';
+}
+print '<option value="'.$year.'" '.$selected.'>'.$year.'</option>';
+}
+?>
 			</select></td>
 	</tr>
 	<tr>
@@ -49,9 +85,9 @@
 	</tr>
 	<tr>
 		<td>Dollar range</td>
-		<td><input name="price_min" type="text" id="price_min" size="8" maxlength="8" /> 
+		<td>$<input name="price_min" type="text" id="price_min" size="8" maxlength="8" /> 
 			to 
-			<input name="price_max" type="text" id="price_max" size="8" maxlength="8" /></td>
+			$<input name="price_max" type="text" id="price_max" size="8" maxlength="8" /></td>
 	</tr>
 </table>
 <p>
